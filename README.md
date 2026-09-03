@@ -33,3 +33,6 @@ pnpm run build:pages
 O resultado estático fica em `dist-pages/`. O caminho `/DALA/` é configurado em `vite.pages.config.ts`. A automação `.github/workflows/deploy-pages.yml` publica alterações da branch `main`; no GitHub, **Settings → Pages → Source** deve permanecer em **GitHub Actions**.
 
 Os arquivos de entrada para o GitHub Pages são `index.html` e `src/github-pages.tsx`. Eles reutilizam o mesmo componente de aplicação e os mesmos estilos da versão Vinext.
+
+TP-260902-041
+
