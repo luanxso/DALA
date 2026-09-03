@@ -4,13 +4,13 @@ import './globals.css';
 export const metadata: Metadata = {
   title: 'Rastreio do lote TP-260902-041 | TechParts',
   description:
-    'Demonstração de rastreabilidade do lote TP-260902-041 da TechParts Industrial.',
+    'Acompanhamento de rastreabilidade do lote TP-260902-041 da TechParts Industrial.',
 };
 
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  themeColor: '#7c2634',
+  themeColor: '#0b5ed7',
 };
 
 export default function RootLayout({
@@ -24,4 +24,3 @@ export default function RootLayout({
     </html>
   );
 }
-

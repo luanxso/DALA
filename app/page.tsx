@@ -17,7 +17,6 @@ import {
   MessageSquareText,
   PackageCheck,
   ShieldCheck,
-  Sparkles,
 } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
@@ -104,15 +103,8 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <div className="demo-strip">
-        <Sparkles aria-hidden="true" />
-        <span>Ambiente demonstrativo</span>
-        <span aria-hidden="true">•</span>
-        <span>Dados fictícios</span>
-      </div>
-
       <header className="site-header">
-        <div className="shell flex items-center justify-between gap-4">
+        <div className="shell flex items-center gap-4">
           <a className="brand" href="#top" aria-label="TechParts — início">
             <span className="brand-mark" aria-hidden="true">
               TP
@@ -122,10 +114,6 @@ export default function Home() {
               <small>Rastreabilidade</small>
             </span>
           </a>
-          <Badge className="status-online">
-            <span className="status-dot" aria-hidden="true" />
-            Sistema atualizado
-          </Badge>
         </div>
       </header>
 
