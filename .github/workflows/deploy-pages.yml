@@ -1,0 +1,55 @@
+name: Publicar no GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Baixar o projeto
+        uses: actions/checkout@v6
+
+      - name: Preparar o pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Preparar o Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Instalar dependências
+        run: pnpm install --frozen-lockfile
+
+      - name: Gerar o site estático
+        run: pnpm run build:pages
+
+      - name: Preparar o GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Enviar os arquivos gerados
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: dist-pages
+
+      - name: Publicar
+        id: deployment
+        uses: actions/deploy-pages@v4
