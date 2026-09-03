@@ -47,7 +47,7 @@ export function LookupScreen({ initialCode, status, onSearch }: LookupScreenProp
                 className="lookup-input"
                 value={code}
                 onChange={(event) => { setCode(event.target.value); setEdited(true); }}
-                placeholder="Ex.: TP-260902-041"
+                placeholder="Digite seu código"
                 autoComplete="off"
                 autoCapitalize="characters"
                 spellCheck={false}
@@ -67,10 +67,6 @@ export function LookupScreen({ initialCode, status, onSearch }: LookupScreenProp
           {error && <p id="lookup-error" className="lookup-error" role="alert">{error}</p>}
         </form>
 
-        <div className="lookup-examples">
-          <span>Exemplos para consulta</span>
-          <p>Lote <code>TP-260902-041</code> <span aria-hidden="true">·</span> Pedido <code>PED-1084</code></p>
-        </div>
       </section>
     </main>
   );

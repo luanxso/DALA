@@ -129,8 +129,11 @@ function SiteHeader({ onHome, showBack = false }: { onHome: () => void; showBack
     <header className="site-header">
       <div className="shell portal-header">
         <button type="button" className="brand brand-home" aria-label="TechParts — consultar pedido ou lote" onClick={onHome}>
-          <span className="brand-mark" aria-hidden="true">TP</span>
-          <span><strong>TechParts</strong><small>Rastreabilidade</small></span>
+          <span className="brand-logo">
+            {/* GitHub Pages serves this small asset directly, without a Next.js image server. */}
+            {/* oxlint-disable-next-line next/no-img-element */}
+            <img src="./techparts-logo.png" alt="TechParts Industrial" width={2000} height={2000} />
+          </span>
         </button>
         {showBack && <Button variant="outline" className="lookup-back" onClick={onHome}>Consultar outro código</Button>}
       </div>

@@ -127,38 +127,24 @@ summary:focus-visible {
   text-decoration: none;
 }
 
-.brand-mark {
-  display: grid;
-  width: 2.35rem;
-  height: 2.35rem;
-  place-items: center;
-  border-radius: 0.55rem 0.55rem 0.55rem 0.15rem;
-  background: var(--blue);
-  color: white;
-  font-size: 0.84rem;
-  font-weight: 900;
-  letter-spacing: -0.03em;
-  box-shadow: 0 0.45rem 1.2rem rgb(11 94 215 / 18%);
+.brand-logo {
+  position: relative;
+  display: block;
+  width: 15rem;
+  height: 5rem;
+  overflow: hidden;
+  border-radius: 0.4rem;
 }
 
-.brand > span:last-child {
-  display: flex;
-  flex-direction: column;
-}
-
-.brand strong {
-  font-size: 1rem;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
-}
-
-.brand small {
-  margin-top: 0.2rem;
-  color: var(--steel);
-  font-size: 0.7rem;
-  font-weight: 650;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+/* Frame the supplied square artwork without changing the original image. */
+.brand-logo img {
+  position: absolute;
+  width: 200%;
+  max-width: none;
+  height: auto;
+  left: -47%;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 .portal-shell {
@@ -271,16 +257,6 @@ summary:focus-visible {
   color: #8f1d15;
   font-size: 0.95rem;
 }
-.lookup-examples {
-  margin-top: 2rem;
-  padding-top: 1.2rem;
-  border-top: 1px solid var(--border);
-  font-size: 0.875rem;
-  color: var(--steel);
-}
-.lookup-examples > span { color: var(--ink); font-weight: 650; }
-.lookup-examples p { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem; margin: 0.6rem 0 0; }
-.lookup-examples code { color: var(--ink); font-size: 0.875rem; }
 
 @media (max-width: 35rem) {
   .lookup-controls { flex-direction: column; }
