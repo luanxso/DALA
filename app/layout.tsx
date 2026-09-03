@@ -2,9 +2,9 @@ import type { Metadata, Viewport } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Rastreio do lote TP-260902-041 | TechParts',
+  title: 'Consultar pedido ou lote | TechParts',
   description:
-    'Acompanhamento de rastreabilidade do lote TP-260902-041 da TechParts Industrial.',
+    'Consulte seu pedido ou lote e acompanhe as etapas do produto na TechParts Industrial.',
 };
 
 export const viewport: Viewport = {

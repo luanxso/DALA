@@ -1,6 +1,6 @@
 'use client';
 
-import { type SyntheticEvent, useState } from 'react';
+import { type SyntheticEvent, useEffect, useState } from 'react';
 import {
   ArrowRight,
   Box,
@@ -47,7 +47,8 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
-import { lotData } from '@/lib/lot-data.mjs';
+import { LookupScreen } from '@/components/lookup-screen';
+import { lookupLot, lookupFromSearch, createLookupHref } from '@/lib/lot-lookup.mjs';
 import {
   buildDocumentNotice,
   buildProtocolConfirmation,
@@ -69,6 +70,83 @@ const iconByDocument = {
 };
 
 export default function Home() {
+  const [route, setRoute] = useState<ReturnType<typeof lookupFromSearch> | undefined>(undefined);
+
+  useEffect(() => {
+    const syncLocation = () => setRoute(lookupFromSearch(window.location.search));
+    syncLocation();
+    window.addEventListener('popstate', syncLocation);
+    return () => window.removeEventListener('popstate', syncLocation);
+  }, []);
+
+  useEffect(() => {
+    if (route === undefined) return;
+    document.title = route?.lot
+      ? `Rastreio do lote ${route.lot.lot} | TechParts`
+      : 'Consultar pedido ou lote | TechParts';
+    document.getElementById(route?.lot ? 'lot-heading' : 'lookup-heading')?.focus();
+  }, [route]);
+
+  function navigate(code = '') {
+    const href = createLookupHref(window.location.href, code);
+    if (href !== `${window.location.pathname}${window.location.search}${window.location.hash}`) {
+      window.history.pushState(null, '', href);
+    }
+    setRoute(lookupFromSearch(window.location.search));
+    window.scrollTo({ top: 0 });
+  }
+
+  function search(code: string) {
+    const result = lookupLot(code);
+    if (result.status === 'empty') { navigate(); setRoute(result); }
+    else navigate(result.code);
+  }
+
+  if (route?.lot) {
+    return <LotTracking lotData={route.lot} onBack={() => navigate()} />;
+  }
+
+  return (
+    <div className="portal-shell">
+      <SiteHeader onHome={() => navigate()} />
+      {route === undefined ? (
+        <main className="shell lookup-main" aria-busy="true"><output>Carregando consulta…</output></main>
+      ) : (
+        <LookupScreen
+          key={route ? `${route.status}:${route.code}` : 'home'}
+          initialCode={route?.code ?? ''}
+          status={route?.status}
+          onSearch={search}
+        />
+      )}
+      <SiteFooter />
+    </div>
+  );
+}
+
+function SiteHeader({ onHome, showBack = false }: { onHome: () => void; showBack?: boolean }) {
+  return (
+    <header className="site-header">
+      <div className="shell portal-header">
+        <button type="button" className="brand brand-home" aria-label="TechParts — consultar pedido ou lote" onClick={onHome}>
+          <span className="brand-mark" aria-hidden="true">TP</span>
+          <span><strong>TechParts</strong><small>Rastreabilidade</small></span>
+        </button>
+        {showBack && <Button variant="outline" className="lookup-back" onClick={onHome}>Consultar outro código</Button>}
+      </div>
+    </header>
+  );
+}
+
+function SiteFooter() {
+  return (
+    <footer className="site-footer">
+      <div className="shell"><span>TechParts Industrial</span><span>Protótipo acadêmico · SENAI</span></div>
+    </footer>
+  );
+}
+
+function LotTracking({ lotData, onBack }: { lotData: typeof import('@/lib/lot-data.mjs').lotData; onBack: () => void }) {
   const [requestOpen, setRequestOpen] = useState(false);
   const [requestSent, setRequestSent] = useState(false);
   const [topic, setTopic] = useState('');
@@ -103,26 +181,14 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <header className="site-header">
-        <div className="shell flex items-center gap-4">
-          <a className="brand" href="#top" aria-label="TechParts — início">
-            <span className="brand-mark" aria-hidden="true">
-              TP
-            </span>
-            <span>
-              <strong>TechParts</strong>
-              <small>Rastreabilidade</small>
-            </span>
-          </a>
-        </div>
-      </header>
+      <SiteHeader onHome={onBack} showBack />
 
       <main id="top" className="shell page-grid">
         <section className="primary-column" aria-label="Acompanhamento do lote">
           <div className="lot-heading">
             <div>
               <p className="eyebrow">Acompanhamento do lote</p>
-              <h1>{lotData.lot}</h1>
+              <h1 id="lot-heading" tabIndex={-1}>{lotData.lot}</h1>
               <p>{lotData.product}</p>
             </div>
             <Badge variant="outline" className="order-badge">
@@ -317,19 +383,14 @@ export default function Home() {
           <div className="security-note">
             <ShieldCheck aria-hidden="true" />
             <p>
-              <strong>Consulta segura</strong>
-              <span>Somente informações autorizadas deste pedido são exibidas.</span>
+              <strong>Informações do lote</strong>
+              <span>Histórico e registros associados ao código consultado.</span>
             </p>
           </div>
         </aside>
       </main>
 
-      <footer className="site-footer">
-        <div className="shell">
-          <span>TechParts Industrial</span>
-          <span>Protótipo acadêmico · SENAI</span>
-        </div>
-      </footer>
+      <SiteFooter />
 
       <Dialog open={requestOpen} onOpenChange={handleRequestOpenChange}>
         <DialogContent className="request-dialog" showCloseButton={false}>
